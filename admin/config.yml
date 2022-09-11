@@ -1,0 +1,859 @@
+backend:
+  name: git-gateway
+  accept_roles:
+    - admin
+    - editor
+media_folder: theme/assets/images
+public_folder: /assets/images
+collections:
+  - name: pages
+    label: Pages
+    identifier_field: title
+    extension: md
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    editor:
+      preview: false
+    folder: cms/pages
+    fields:
+      - label: Title
+        name: title
+        widget: string
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '{{slug}}.html'
+      - &ref_0
+        label: Seo
+        name: seo
+        widget: object
+        collapsed: true
+        fields:
+          - label: Title
+            name: title
+            widget: string
+            required: false
+          - label: Description
+            name: description
+            widget: string
+            required: false
+          - label: No index
+            name: noindex
+            widget: boolean
+            default: false
+            required: false
+          - label: Open Graph Title
+            name: og:title
+            widget: string
+            required: false
+          - label: Open Graph Image
+            name: og:image
+            widget: image
+            required: false
+            media_library:
+              config:
+                multiple: false
+          - label: Twitter Title
+            name: twitter:title
+            widget: string
+            default: summary
+            required: false
+          - label: Twitter Card
+            name: twitter:card
+            widget: string
+            default: summary
+            required: false
+          - label: Twitter Site
+            name: twitter:site
+            widget: string
+            required: false
+          - label: Twitter Creator
+            name: twitter:creator
+            widget: string
+            required: false
+          - label: Additional HTML tags
+            name: additional_tags
+            widget: text
+            required: false
+  - name: project
+    label: Projects
+    folder: cms/project
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - label: Project Details
+        name: body
+        widget: markdown
+        required: false
+      - hint: ''
+        name: f_project-summary
+        label: Project Summary
+        widget: text
+        required: false
+      - hint: Used on project list grid
+        name: f_main-project-image
+        label: Main Project Image
+        widget: object
+        required: false
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: false
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: ''
+        name: f_client
+        label: Client
+        widget: string
+        required: false
+      - hint: ''
+        name: f_client-logo
+        label: Client Logo
+        widget: object
+        required: false
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: false
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: ''
+        name: f_services-rendered
+        label: Services Rendered
+        widget: markdown
+        required: false
+      - hint: ''
+        name: f_featured-project
+        label: Featured Project?
+        widget: boolean
+        required: false
+      - hint: ''
+        name: f_color
+        label: Color
+        widget: color
+        required: false
+        enableAlpha: true
+        allowInput: true
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: project
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[project].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - label: Theme Settings
+    name: settings
+    identifier_field: title
+    extension: json
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    editor:
+      preview: false
+    files:
+      - label: General
+        name: site
+        file: cms/_data/settings/site.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: General
+          - hint: Full domain url (needed for a correct sitemap file)
+            name: domain
+            label: Domain
+            widget: string
+            required: false
+          - name: favicon
+            label: Favicon
+            widget: image
+            allow_multiple: false
+            required: false
+          - name: apple_touch_icon
+            label: Apple Touch Icon
+            widget: image
+            allow_multiple: false
+            required: false
+          - name: header_additional_content
+            label: Additional Content Header
+            hint: Content here will be placed before </head> tag
+            widget: text
+            required: false
+          - name: footer_additional_content
+            label: Additional Content Footer
+            hint: Content here will be placed before </body> tag
+            widget: text
+            required: false
+          - name: images_optimization
+            label: Images Optimization
+            widget: object
+            collapsed: false
+            fields:
+              - label: Image Formats
+                name: formats
+                widget: select
+                multiple: true
+                options:
+                  - label: Avif
+                    value: avif
+                  - label: Webp
+                    value: webp
+              - label: Image Dimensions
+                name: dimensions
+                widget: select
+                multiple: true
+                options:
+                  - label: '500'
+                    value: 500
+                  - label: '800'
+                    value: 800
+                  - label: '1080'
+                    value: 1080
+                  - label: '1600'
+                    value: 1600
+                  - label: '2000'
+                    value: 2000
+                  - label: '2600'
+                    value: 2600
+      - label: Colors
+        name: colors
+        file: cms/_data/colors.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Colors
+      - label: Texts
+        name: texts
+        file: cms/_data/texts.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Texts
+          - hint: 'Original text: Behance, key: 559c0b34'
+            label: Text
+            name: 559c0b34
+            widget: string
+          - hint: 'Original text: Instagram, key: 792b2792'
+            label: Text
+            name: 792b2792
+            widget: string
+          - hint: 'Original text: Give your business, key: 6e09a25e'
+            label: Text
+            name: 6e09a25e
+            widget: string
+          - hint: 'Original text: an Outstanding, key: 1cee4207'
+            label: Text
+            name: 1cee4207
+            widget: string
+          - hint: 'Original text:  Online Presence, key: 5cf00c08'
+            label: Text
+            name: 5cf00c08
+            widget: string
+          - hint: >-
+              Original text: SpurPete is a website design studio that
+              specialises in creating beautiful, intelligent websites. Our focus
+              is on user-focused design, so that your visitors know exactly how
+              to navigate your website. Whoever you are and whatever your
+              business, we can help you — whether it's a new brand identity or a
+              website., key: 647f27ac
+            label: Text
+            name: 647f27ac
+            widget: text
+          - hint: 'Original text: available for projects, key: 493f91e8'
+            label: Text
+            name: 493f91e8
+            widget: string
+          - hint: 'Original text: A quick glance of our , key: 44c9a3a3'
+            label: Text
+            name: 44c9a3a3
+            widget: string
+          - hint: 'Original text: Latest , key: 6071f959'
+            label: Text
+            name: 6071f959
+            widget: string
+          - hint: 'Original text: Works, key: 4fe2b62'
+            label: Text
+            name: 4fe2b62
+            widget: string
+          - hint: 'Original text: No items found., key: 3d503d2b'
+            label: Text
+            name: 3d503d2b
+            widget: string
+          - hint: 'Original text: Previous, key: -4811e0e9'
+            label: Text
+            name: '-4811e0e9'
+            widget: string
+          - hint: 'Original text: View More Projects, key: 311466ca'
+            label: Text
+            name: 311466ca
+            widget: string
+          - hint: 'Original text: Let''s your Website , key: 6977e059'
+            label: Text
+            name: '6977e059'
+            widget: string
+          - hint: 'Original text: together, key: -489b3dc6'
+            label: Text
+            name: '-489b3dc6'
+            widget: string
+          - hint: >-
+              Original text: Do you want to build your website but don't know
+              where to start? Or maybe you've started, but are stuck and unsure
+              of what next step you should take? We'll build your website
+              together. Together, we can come up with a design that is best
+              suited for your business needs, style, and budget., key: -7b68e98d
+            label: Text
+            name: '-7b68e98d'
+            widget: text
+          - hint: 'Original text: Whatsapp Us, key: -792a8014'
+            label: Text
+            name: '-792a8014'
+            widget: string
+          - hint: 'Original text: Mail Us, key: -6b40da59'
+            label: Text
+            name: '-6b40da59'
+            widget: string
+          - hint: 'Original text: Copyright © 2022 -Spurpete., key: 5c629d53'
+            label: Text
+            name: 5c629d53
+            widget: string
+          - hint: 'Original text: Protected page, key: -11c6301f'
+            label: Text
+            name: '-11c6301f'
+            widget: string
+          - hint: >-
+              Original text: Incorrect password. Please try again., key:
+              -f5c4b5f
+            label: Text
+            name: '-f5c4b5f'
+            widget: string
+          - hint: 'Original text: Page not found, key: 49a057c4'
+            label: Text
+            name: 49a057c4
+            widget: string
+          - hint: >-
+              Original text: The page you are looking for doesn't exist or has
+              been moved., key: 583f3656
+            label: Text
+            name: 583f3656
+            widget: string
+          - hint: 'Original text: Impressum, key: 6f6b7057'
+            label: Text
+            name: 6f6b7057
+            widget: string
+          - hint: 'Original text: Anschrift, key: -45932f90'
+            label: Text
+            name: '-45932f90'
+            widget: string
+          - hint: 'Original text: Bourros Rise GmbH, key: -3cae46d1'
+            label: Text
+            name: '-3cae46d1'
+            widget: string
+          - hint: 'Original text: Hohenfelderstraße 17, key: -13d6dfde'
+            label: Text
+            name: '-13d6dfde'
+            widget: string
+          - hint: 'Original text: 56068 Koblenz, key: 208b68f4'
+            label: Text
+            name: 208b68f4
+            widget: string
+          - hint: 'Original text: ‍, key: 200d'
+            label: Text
+            name: 200d
+            widget: string
+          - hint: 'Original text: Geschäftsführer, key: -25ed1f58'
+            label: Text
+            name: '-25ed1f58'
+            widget: string
+          - hint: 'Original text: Christian Schütte, key: 31b06e9a'
+            label: Text
+            name: 31b06e9a
+            widget: string
+          - hint: 'Original text: Nicolas Kayser, key: 37910346'
+            label: Text
+            name: '37910346'
+            widget: string
+          - hint: 'Original text: Kontakt, key: 43219700'
+            label: Text
+            name: '43219700'
+            widget: string
+          - hint: 'Original text: Tel.: +49 261 134903 30, key: -6b095129'
+            label: Text
+            name: '-6b095129'
+            widget: string
+          - hint: 'Original text: E-Mail: , key: -2ae9163b'
+            label: Text
+            name: '-2ae9163b'
+            widget: string
+          - hint: 'Original text: nicolas.kayser@bourros.com, key: 63661cd3'
+            label: Text
+            name: 63661cd3
+            widget: string
+          - hint: 'Original text: Registereintrag, key: -f12ddb5'
+            label: Text
+            name: '-f12ddb5'
+            widget: string
+          - hint: >-
+              Original text: Sitze der Gesellschaft: 56068 Koblenz, key:
+              3606da41
+            label: Text
+            name: 3606da41
+            widget: string
+          - hint: 'Original text: Handelregistereintrag: HRB 26099, key: 3025bb29'
+            label: Text
+            name: 3025bb29
+            widget: string
+          - hint: 'Original text: Umsatzsteuer-ID: DE316715731, key: 70fe68ed'
+            label: Text
+            name: 70fe68ed
+            widget: string
+          - hint: >-
+              Original text: Umsatzsteuer-Identifikationsnummer gemäß §27a
+              Umsatzsteuergesetz: , key: 16127b39
+            label: Text
+            name: 16127b39
+            widget: string
+          - hint: >-
+              Original text: DE276630311Verantwortlich für den Inhalt nach § 55
+              Abs. 2 RStV, key: -1b6bd9dd
+            label: Text
+            name: '-1b6bd9dd'
+            widget: string
+          - hint: 'Original text: Haftungsausschluss, key: -6da66772'
+            label: Text
+            name: '-6da66772'
+            widget: string
+          - hint: 'Original text: Haftung für Inhalte, key: 5dc68522'
+            label: Text
+            name: 5dc68522
+            widget: string
+          - hint: >-
+              Original text: Die Inhalte unserer Seiten wurden mit größter
+              Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und
+              Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
+              Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene
+              Inhalte auf diesen Seiten nach den allgemeinen Gesetzen
+              verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter
+              jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde
+              Informationen zu überwachen oder nach Umständen zu forschen, die
+              auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur
+              Entfernung oder Sperrung der Nutzung von Informationen nach den
+              allgemeinen Gesetzen bleiben hiervon unberührt. Eine
+              diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der
+              Kenntnis einer konkreten Rechtsverletzung möglich. Bei
+              Bekanntwerden von entsprechenden Rechtsverletzungen werden wir
+              diese Inhalte umgehend entfernen., key: 475efff5
+            label: Text
+            name: 475efff5
+            widget: text
+          - hint: 'Original text: Haftung für Links, key: 2dce875c'
+            label: Text
+            name: 2dce875c
+            widget: string
+          - hint: >-
+              Original text: Unser Angebot enthält Links zu externen Webseiten
+              Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb
+              können wir für diese fremden Inhalte auch keine Gewähr übernehmen.
+              Für die Inhalte der verlinkten Seiten ist stets der jeweilige
+              Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten
+              Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche
+              Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum
+              Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente
+              inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne
+              konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei
+              Bekanntwerden von Rechtsverletzungen werden wir derartige Links
+              umgehend entfernen., key: 3c51e0ac
+            label: Text
+            name: 3c51e0ac
+            widget: text
+          - hint: 'Original text: Urheberrecht, key: 4b028e7'
+            label: Text
+            name: 4b028e7
+            widget: string
+          - hint: >-
+              Original text: Die durch die Seitenbetreiber erstellten Inhalte
+              und Werke auf diesen Seiten unterliegen dem deutschen
+              Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und
+              jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes
+              bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw.
+              Erstellers. Downloads und Kopien dieser Seite sind nur für den
+              privaten, nicht kommerziellen Gebrauch gestattet. Soweit die
+              Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden,
+              werden die Urheberrechte Dritter beachtet. Insbesondere werden
+              Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem
+              auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um
+              einen entsprechenden Hinweis. Bei Bekanntwerden von
+              Rechtsverletzungen werden wir derartige Inhalte umgehend
+              entfernen., key: 173e392b
+            label: Text
+            name: 173e392b
+            widget: text
+          - hint: 'Original text: Angaben gemäß § 5 TMG, key: -7d17ba28'
+            label: Text
+            name: '-7d17ba28'
+            widget: string
+          - hint: 'Original text: Livegang / SOON, key: 32540ead'
+            label: Text
+            name: 32540ead
+            widget: string
+          - hint: "Original text: Hohenfelder Str. 17 /\_56068 KOBLENZ, key: -6a1c5ea6"
+            label: Text
+            name: '-6a1c5ea6'
+            widget: string
+          - hint: 'Original text: Let''s Build your Website , key: 1fd568c7'
+            label: Text
+            name: 1fd568c7
+            widget: string
+      - label: Links
+        name: links
+        file: cms/_data/links.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Links
+          - hint: 'Original link: /, key: 2f'
+            label: Link
+            name: 2f
+            widget: string
+          - hint: 'Original link: https://www.behance.net/spurpete, key: -2a7895ce'
+            label: Link
+            name: '-2a7895ce'
+            widget: string
+          - hint: 'Original link: https://www.instagram.com/spur_pete/, key: 421d34d4'
+            label: Link
+            name: 421d34d4
+            widget: string
+          - hint: 'Original link: #, key: 23'
+            label: Link
+            name: '23'
+            widget: string
+          - hint: >-
+              Original link:
+              mailto:info@nicolaskayser.com?subject=Project%20inquiry, key:
+              -638f9c56
+            label: Link
+            name: '-638f9c56'
+            widget: string
+          - hint: 'Original link: https://wa.link/2q3xfk, key: -42b533b7'
+            label: Link
+            name: '-42b533b7'
+            widget: string
+          - hint: 'Original link: mailto:spurandpete@gmail.com, key: -657f2654'
+            label: Link
+            name: '-657f2654'
+            widget: string
+          - hint: >-
+              Original link: https://www.linkedin.com/company/spur-pete/, key:
+              -4da77680
+            label: Link
+            name: '-4da77680'
+            widget: string
+          - hint: 'Original link: mailto:nicolas.kayser@bourros.com, key: -71f09125'
+            label: Link
+            name: '-71f09125'
+            widget: string
+          - hint: 'Original link: /impressum, key: -2e8aead8'
+            label: Link
+            name: '-2e8aead8'
+            widget: string
+      - label: Images
+        name: images
+        file: cms/_data/images.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Images
+          - label: Image
+            name: 1a301464
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i290d7665
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: i518b7c9b
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 3313d070
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 2dcab44e
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-6c355196'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 42b8f266
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-79c097'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 6b41d068
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 336a0397
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 6be94059
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-28f44e50'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '0'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 429255f7
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-137c0172'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 36c5e456
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-362dea8a'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-443bf8f1'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-2b1beb3c'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+publish_mode: editorial_workflow
